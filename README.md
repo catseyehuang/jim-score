@@ -1,8 +1,8 @@
-# ⭐ 寶貝計分板
+# ⭐ JIM 計分板
 
 一個專為親子設計的行為計分工具，幫助記錄孩子的好行為，並用積分兌換獎勵。
 
-🌐 **使用網址：** https://catseyehuang.github.io/kids-score
+🌐 **使用網址：** https://catseyehuang.github.io/jim-score
 
 ---
 
