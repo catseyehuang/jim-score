@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#2563EB">
@@ -10,504 +10,230 @@
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --orange: #2563EB;
-    --yellow: #60A5FA;
+  --blue: #2563EB;
+  --blue-light: #60A5FA;
+  --blue-pale: #EFF6FF;
+  --blue-border: #DBEAFE;
     --green: #06D6A0;
-    --blue: #1E40AF;
     --red: #EF4444;
+  --yellow: #F59E0B;
     --purple: #9B5DE5;
     --bg: #F0F6FF;
     --card: #FFFFFF;
-    --text: #2D2D2D;
-    --muted: #9CA3AF;
-    --border: #DBEAFE;
-    --shadow: 0 4px 20px rgba(37,99,235,0.12);
+  --text: #1E293B;
+  --muted: #94A3B8;
+  --border: #E2E8F0;
+  --shadow: 0 4px 24px rgba(37,99,235,0.10);
     --radius: 20px;
+  --nav-h: 68px;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
 
-  body {
-    font-family: 'Nunito', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    overflow-x: hidden;
+/* ── RWD ── */
+.app-wrapper { max-width: 560px; margin: 0 auto; min-height: 100vh; position: relative; background: var(--bg); }
+@media (min-width: 600px) {
+  body { background: #CBD5E1; display: flex; align-items: flex-start; justify-content: center; padding: 24px 0 40px; min-height: 100vh; }
+  .app-wrapper { border-radius: 32px; overflow: hidden; min-height: auto; box-shadow: 0 8px 48px rgba(0,0,0,0.18); }
+  .bottom-nav { position: relative; border-radius: 0 0 32px 32px; }
   }
 
   /* ── SCREENS ── */
-  .screen { display: none; min-height: 100vh; padding-bottom: 80px; }
+.screen { display: none; padding-bottom: 16px; }
   .screen.active { display: block; }
 
-  /* ── NAV ── */
+/* ── BOTTOM NAV ── */
   .bottom-nav {
-    position: fixed; bottom: 0; left: 0; right: 0;
+  position: sticky; bottom: 0;
     background: white;
-    border-top: 2px solid var(--border);
-    display: flex;
-    z-index: 100;
-    box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+  border-top: 1.5px solid var(--border);
+  display: flex; z-index: 100;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.07);
+  height: var(--nav-h);
   }
   .nav-btn {
-    flex: 1; padding: 10px 4px 12px;
+  flex: 1; padding: 8px 4px 10px;
     background: none; border: none; cursor: pointer;
     display: flex; flex-direction: column; align-items: center; gap: 3px;
-    font-family: 'Nunito', sans-serif;
-    font-size: 11px; font-weight: 700;
-    color: var(--muted);
-    transition: all 0.2s;
+  font-family: 'Nunito', sans-serif; font-size: 11px; font-weight: 700;
+  color: var(--muted); transition: all 0.2s;
   }
-  .nav-btn .icon { font-size: 22px; transition: transform 0.2s; }
-  .nav-btn.active { color: var(--orange); }
-  .nav-btn.active .icon { transform: scale(1.2); }
+.nav-btn .icon { font-size: 24px; transition: transform 0.2s; line-height: 1; }
+.nav-btn.active { color: var(--blue); }
+.nav-btn.active .icon { transform: scale(1.15); }
+.collect-nav { position: relative; }
+.collect-nav .icon-wrap {
+  background: linear-gradient(135deg, var(--blue), var(--blue-light));
+  border-radius: 16px; width: 52px; height: 52px;
+  display: flex; align-items: center; justify-content: center;
+  margin-top: -20px; box-shadow: 0 4px 16px rgba(37,99,235,0.4);
+  transition: transform 0.2s;
+}
+.collect-nav:active .icon-wrap { transform: scale(0.93); }
+.collect-nav .clabel { color: var(--blue); font-weight: 800; font-size: 11px; margin-top: 2px; }
 
-  /* ── HEADER ── */
-  .header {
+/* ── HEADERS ── */
+.page-header {
     background: linear-gradient(135deg, #2563EB 0%, #60A5FA 100%);
-    padding: 50px 20px 30px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
+  padding: 44px 24px 28px; position: relative; overflow: hidden;
   }
-  .header::before {
-    content: '';
-    position: absolute; top: -40px; right: -40px;
-    width: 160px; height: 160px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.1);
-  }
-  .header::after {
-    content: '';
-    position: absolute; bottom: -60px; left: -30px;
-    width: 200px; height: 200px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.07);
-  }
-  .header h1 {
-    font-family: 'Baloo 2', cursive;
-    font-size: 26px; color: white;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    position: relative; z-index: 1;
-  }
-  .header p { color: rgba(255,255,255,0.85); font-size: 13px; margin-top: 4px; position: relative; z-index: 1; }
+.page-header::before { content:''; position:absolute; top:-50px; right:-50px; width:180px; height:180px; border-radius:50%; background:rgba(255,255,255,0.08); }
+.page-header h1 { font-family:'Baloo 2',cursive; font-size:24px; color:white; position:relative; z-index:1; }
+.page-header p { color:rgba(255,255,255,0.8); font-size:13px; margin-top:4px; position:relative; z-index:1; }
 
-  /* ── SCORE CARD ── */
+/* ── SCORE HERO ── */
   .score-hero {
-    margin: -20px 20px 0;
-    background: white;
-    border-radius: var(--radius);
-    padding: 24px;
-    box-shadow: var(--shadow);
-    text-align: center;
-    position: relative; z-index: 2;
+  margin: -20px 20px 0; background: white;
+  border-radius: var(--radius); padding: 24px 24px 20px;
+  box-shadow: var(--shadow); text-align: center; position: relative; z-index: 2;
   }
-  .score-label { font-size: 13px; color: var(--muted); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+.score-label { font-size: 12px; color: var(--muted); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
   .score-number {
-    font-family: 'Baloo 2', cursive;
-    font-size: 72px; line-height: 1;
+  font-family: 'Baloo 2', cursive; font-size: 80px; line-height: 1;
     background: linear-gradient(135deg, #2563EB, #60A5FA);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: pulse-score 2s ease-in-out infinite;
-  }
-  @keyframes pulse-score {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.03); }
-  }
-  .score-unit { font-size: 18px; color: var(--muted); font-weight: 800; }
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.score-unit { font-size: 16px; color: var(--muted); font-weight: 800; margin-top: -4px; }
+
+/* ── PROGRESS ── */
+.progress-wrap { margin-top: 16px; }
+.progress-label { display:flex; justify-content:space-between; font-size:12px; color:var(--muted); font-weight:700; margin-bottom:6px; }
+.progress-track { background:var(--blue-border); border-radius:100px; height:10px; overflow:hidden; }
+.progress-fill { background:linear-gradient(90deg,#2563EB,#60A5FA); height:100%; border-radius:100px; transition:width 0.6s cubic-bezier(0.34,1.56,0.64,1); min-width:4px; }
+.progress-hint { font-size:12px; color:var(--blue); font-weight:700; margin-top:6px; text-align:center; }
 
   /* ── SECTION ── */
   .section { padding: 20px 20px 0; }
-  .section-title {
-    font-family: 'Baloo 2', cursive;
-    font-size: 18px; color: var(--text);
-    margin-bottom: 12px;
-    display: flex; align-items: center; gap: 8px;
-  }
-
-  /* ── BEHAVIOR GRID ── */
-  .behavior-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
-  .behavior-btn {
-    background: white;
-    border: 2px solid var(--border);
-    border-radius: 16px;
-    padding: 14px 10px;
-    cursor: pointer;
-    text-align: center;
-    transition: all 0.18s;
-    font-family: 'Nunito', sans-serif;
-    position: relative;
-    overflow: hidden;
-  }
-  .behavior-btn:active { transform: scale(0.95); }
-  .behavior-btn .b-name { font-size: 13px; font-weight: 700; color: var(--text); display: block; margin-top: 4px; }
-  .behavior-btn .b-score {
-    font-family: 'Baloo 2', cursive;
-    font-size: 20px; font-weight: 800;
-  }
-  .behavior-btn.add { border-color: #D1FAE5; background: #F0FDF4; }
-  .behavior-btn.add .b-score { color: var(--green); }
-  .behavior-btn.sub { border-color: #FEE2E2; background: #FFF5F5; }
-  .behavior-btn.sub .b-score { color: var(--red); }
-  .behavior-btn.warn { border-color: #FEF9C3; background: #FEFCE8; }
-  .behavior-btn.warn .b-score { color: #CA8A04; }
+.section-title { font-family:'Baloo 2',cursive; font-size:17px; color:var(--text); margin-bottom:12px; display:flex; align-items:center; gap:8px; }
 
   /* ── RECORDS ── */
-  .record-list { display: flex; flex-direction: column; gap: 8px; }
-  .record-item {
-    background: white;
-    border-radius: 14px;
-    padding: 12px 16px;
-    display: flex; align-items: center; gap: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  }
-  .record-icon { font-size: 22px; width: 36px; text-align: center; }
-  .record-info { flex: 1; }
-  .record-name { font-size: 14px; font-weight: 700; }
-  .record-time { font-size: 11px; color: var(--muted); margin-top: 2px; }
-  .record-score {
-    font-family: 'Baloo 2', cursive;
-    font-size: 20px; font-weight: 800;
-  }
-  .record-score.pos { color: var(--green); }
-  .record-score.neg { color: var(--red); }
-  .record-score.zero { color: #CA8A04; }
+.record-list { display:flex; flex-direction:column; gap:8px; }
+.record-item { background:white; border-radius:14px; padding:12px 16px; display:flex; align-items:center; gap:12px; box-shadow:0 2px 8px rgba(0,0,0,0.04); }
+.record-icon { font-size:22px; width:36px; text-align:center; flex-shrink:0; }
+.record-info { flex:1; min-width:0; }
+.record-name { font-size:14px; font-weight:700; }
+.record-time { font-size:11px; color:var(--muted); margin-top:2px; }
+.record-note { font-size:11px; color:var(--muted); margin-top:2px; font-style:italic; }
+.record-score { font-family:'Baloo 2',cursive; font-size:22px; font-weight:800; flex-shrink:0; }
+.record-score.pos { color:var(--green); }
+.record-score.neg { color:var(--red); }
+.record-score.zero { color:var(--yellow); }
 
   /* ── REWARDS ── */
-  .reward-grid { display: flex; flex-direction: column; gap: 10px; }
-  .reward-item {
-    background: white;
-    border-radius: 16px;
-    padding: 16px;
-    display: flex; align-items: center; gap: 14px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    cursor: pointer;
-    transition: all 0.18s;
-    border: 2px solid transparent;
-  }
-  .reward-item:active { transform: scale(0.98); }
-  .reward-item.affordable { border-color: var(--green); }
-  .reward-item.locked { opacity: 0.55; }
-  .reward-emoji { font-size: 32px; }
-  .reward-info { flex: 1; }
-  .reward-name { font-size: 15px; font-weight: 800; }
-  .reward-cost { font-size: 12px; color: var(--muted); margin-top: 2px; font-weight: 600; }
-  .redeem-btn {
-    background: var(--green);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    padding: 8px 14px;
-    font-family: 'Nunito', sans-serif;
-    font-weight: 800; font-size: 13px;
-    cursor: pointer;
-    transition: all 0.18s;
-  }
-  .redeem-btn:disabled { background: var(--muted); cursor: not-allowed; }
-  .lock-icon { font-size: 20px; color: var(--muted); }
+.reward-grid { display:flex; flex-direction:column; gap:10px; }
+.reward-item { background:white; border-radius:16px; padding:16px; display:flex; align-items:center; gap:14px; box-shadow:0 2px 8px rgba(0,0,0,0.04); border:2px solid transparent; transition:all 0.18s; }
+.reward-item.affordable { border-color:var(--green); }
+.reward-item.locked { opacity:0.55; }
+.reward-emoji { font-size:32px; flex-shrink:0; }
+.reward-info { flex:1; min-width:0; }
+.reward-name { font-size:15px; font-weight:800; }
+.reward-cost { font-size:12px; color:var(--muted); margin-top:2px; font-weight:600; }
+.redeem-btn { background:var(--green); color:white; border:none; border-radius:10px; padding:8px 14px; font-family:'Nunito',sans-serif; font-weight:800; font-size:13px; cursor:pointer; flex-shrink:0; }
+.redeem-btn:active { transform:scale(0.95); }
+
+/* ── BEHAVIOR GRID ── */
+.behavior-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.behavior-btn { background:white; border:2px solid var(--border); border-radius:16px; padding:14px 10px; cursor:pointer; text-align:center; transition:all 0.18s; font-family:'Nunito',sans-serif; }
+.behavior-btn:active { transform:scale(0.95); }
+.behavior-btn .b-name { font-size:13px; font-weight:700; color:var(--text); display:block; margin-top:4px; }
+.behavior-btn .b-score { font-family:'Baloo 2',cursive; font-size:22px; font-weight:800; }
+.behavior-btn.add { border-color:#D1FAE5; background:#F0FDF4; } .behavior-btn.add .b-score { color:var(--green); }
+.behavior-btn.sub { border-color:#FEE2E2; background:#FFF5F5; } .behavior-btn.sub .b-score { color:var(--red); }
+.behavior-btn.warn { border-color:#FEF9C3; background:#FEFCE8; } .behavior-btn.warn .b-score { color:var(--yellow); }
 
   /* ── ADMIN ── */
-  .admin-header {
-    background: linear-gradient(135deg, var(--purple) 0%, #7C3AED 100%);
-    padding: 50px 20px 30px;
-    text-align: center;
-  }
-  .admin-header h1 { font-family: 'Baloo 2', cursive; font-size: 24px; color: white; }
-  .admin-header p { color: rgba(255,255,255,0.8); font-size: 13px; margin-top: 4px; }
-
-  .admin-section {
-    margin: 16px 20px 0;
-    background: white;
-    border-radius: var(--radius);
-    overflow: hidden;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-  }
-  .admin-section-title {
-    padding: 14px 18px;
-    font-weight: 800; font-size: 14px;
-    background: #F9FAFB;
-    border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; gap: 8px;
-  }
-  .admin-row {
-    padding: 14px 18px;
-    display: flex; align-items: center; justify-content: space-between;
-    border-bottom: 1px solid var(--border);
-    gap: 10px;
-  }
-  .admin-row:last-child { border-bottom: none; }
-  .admin-row-info { flex: 1; }
-  .admin-row-name { font-size: 14px; font-weight: 700; }
-  .admin-row-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
-  .badge {
-    font-size: 11px; font-weight: 800;
-    padding: 3px 10px; border-radius: 20px;
-  }
-  .badge.add { background: #D1FAE5; color: #065F46; }
-  .badge.sub { background: #FEE2E2; color: #991B1B; }
-  .badge.warn { background: #FEF9C3; color: #92400E; }
-
-  .icon-btn {
-    background: none; border: none; cursor: pointer;
-    font-size: 18px; padding: 4px 6px; border-radius: 8px;
-    transition: background 0.15s;
-  }
-  .icon-btn:hover { background: #F3F4F6; }
+.admin-header { background:linear-gradient(135deg,var(--purple) 0%,#7C3AED 100%); padding:44px 24px 28px; }
+.admin-header h1 { font-family:'Baloo 2',cursive; font-size:24px; color:white; }
+.admin-header p { color:rgba(255,255,255,0.8); font-size:13px; margin-top:4px; }
+.admin-section { margin:16px 20px 0; background:white; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,0.05); }
+.admin-section-title { padding:14px 18px; font-weight:800; font-size:14px; background:#F8FAFC; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:8px; }
+.admin-row { padding:12px 18px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border); gap:10px; }
+.admin-row:last-child { border-bottom:none; }
+.admin-row-info { flex:1; min-width:0; }
+.admin-row-name { font-size:14px; font-weight:700; }
+.admin-row-sub { font-size:12px; color:var(--muted); margin-top:2px; }
+.badge { font-size:11px; font-weight:800; padding:3px 10px; border-radius:20px; flex-shrink:0; }
+.badge.add { background:#D1FAE5; color:#065F46; }
+.badge.sub { background:#FEE2E2; color:#991B1B; }
+.badge.warn { background:#FEF9C3; color:#92400E; }
+.icon-btn { background:none; border:none; cursor:pointer; font-size:18px; padding:4px 8px; border-radius:8px; transition:background 0.15s; }
+.icon-btn:hover { background:#F1F5F9; }
 
   /* ── INPUTS ── */
-  input, select, textarea {
-    font-family: 'Nunito', sans-serif;
-    border: 2px solid var(--border);
-    border-radius: 12px;
-    padding: 10px 14px;
-    font-size: 14px;
-    width: 100%;
-    outline: none;
-    transition: border 0.2s;
-    background: white;
-  }
-  input:focus, select:focus { border-color: var(--orange); }
-  .input-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
-  .input-group label { font-size: 13px; font-weight: 700; color: var(--muted); }
-  .input-row { display: flex; gap: 8px; }
-  .input-row input, .input-row select { flex: 1; }
+input, select { font-family:'Nunito',sans-serif; border:2px solid var(--border); border-radius:12px; padding:10px 14px; font-size:14px; width:100%; outline:none; transition:border 0.2s; background:white; color:var(--text); }
+input:focus, select:focus { border-color:var(--blue); }
+.input-group { display:flex; flex-direction:column; gap:6px; margin-bottom:12px; }
+.input-group label { font-size:13px; font-weight:700; color:var(--muted); }
+.input-row { display:flex; gap:8px; }
+.input-row input, .input-row select { flex:1; }
 
   /* ── BUTTONS ── */
-  .btn {
-    font-family: 'Nunito', sans-serif;
-    font-weight: 800; font-size: 15px;
-    border: none; border-radius: 14px;
-    padding: 13px 20px;
-    cursor: pointer;
-    transition: all 0.18s;
-    width: 100%;
-  }
-  .btn:active { transform: scale(0.97); }
-  .btn-primary { background: var(--orange); color: white; box-shadow: 0 4px 14px rgba(37,99,235,0.35); }
-  .btn-green { background: var(--green); color: white; box-shadow: 0 4px 14px rgba(6,214,160,0.3); }
-  .btn-purple { background: var(--purple); color: white; box-shadow: 0 4px 14px rgba(155,93,229,0.3); }
-  .btn-gray { background: #F3F4F6; color: var(--text); }
-  .btn-sm { padding: 8px 16px; font-size: 13px; border-radius: 10px; width: auto; }
+.btn { font-family:'Nunito',sans-serif; font-weight:800; font-size:15px; border:none; border-radius:14px; padding:13px 20px; cursor:pointer; transition:all 0.18s; width:100%; }
+.btn:active { transform:scale(0.97); }
+.btn-primary { background:var(--blue); color:white; box-shadow:0 4px 14px rgba(37,99,235,0.3); }
+.btn-green { background:var(--green); color:white; box-shadow:0 4px 14px rgba(6,214,160,0.3); }
+.btn-red { background:var(--red); color:white; }
+.btn-purple { background:var(--purple); color:white; }
+.btn-gray { background:#F1F5F9; color:var(--text); }
+.btn-sm { padding:8px 16px; font-size:13px; border-radius:10px; width:auto; }
 
   /* ── PIN MODAL ── */
-  .modal-overlay {
-    display: none;
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.5);
-    z-index: 200;
-    align-items: center; justify-content: center;
-    backdrop-filter: blur(4px);
-  }
-  .modal-overlay.show { display: flex; }
-  .modal {
-    background: white;
-    border-radius: 24px;
-    padding: 28px 24px;
-    width: 88%; max-width: 340px;
-    animation: pop-in 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  }
-  @keyframes pop-in {
-    from { transform: scale(0.8); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
-  }
-  .modal h2 { font-family: 'Baloo 2', cursive; font-size: 22px; text-align: center; margin-bottom: 6px; }
-  .modal p { text-align: center; color: var(--muted); font-size: 13px; margin-bottom: 20px; }
-  .pin-dots { display: flex; justify-content: center; gap: 12px; margin-bottom: 20px; }
-  .pin-dot {
-    width: 16px; height: 16px; border-radius: 50%;
-    border: 2px solid var(--border);
-    transition: all 0.2s;
-  }
-  .pin-dot.filled { background: var(--orange); border-color: var(--orange); }
-  .pin-pad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-  .pin-key {
-    background: #F9FAFB;
-    border: 2px solid var(--border);
-    border-radius: 14px;
-    padding: 16px;
-    font-family: 'Baloo 2', cursive;
-    font-size: 22px; font-weight: 700;
-    cursor: pointer;
-    transition: all 0.15s;
-    text-align: center;
-  }
-  .pin-key:active { transform: scale(0.92); background: var(--border); }
-  .pin-key.del { font-size: 18px; }
-  .pin-error { color: var(--red); font-size: 13px; text-align: center; margin-top: 10px; font-weight: 700; }
+.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:300; align-items:center; justify-content:center; backdrop-filter:blur(4px); }
+.modal-overlay.show { display:flex; }
+.modal { background:white; border-radius:24px; padding:28px 24px; width:88%; max-width:340px; animation:pop-in 0.25s cubic-bezier(0.175,0.885,0.32,1.275); }
+@keyframes pop-in { from{transform:scale(0.8);opacity:0} to{transform:scale(1);opacity:1} }
+.modal h2 { font-family:'Baloo 2',cursive; font-size:22px; text-align:center; margin-bottom:6px; }
+.modal p { text-align:center; color:var(--muted); font-size:13px; margin-bottom:20px; }
+.pin-dots { display:flex; justify-content:center; gap:12px; margin-bottom:20px; }
+.pin-dot { width:16px; height:16px; border-radius:50%; border:2px solid var(--border); transition:all 0.2s; }
+.pin-dot.filled { background:var(--blue); border-color:var(--blue); }
+.pin-pad { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.pin-key { background:#F8FAFC; border:2px solid var(--border); border-radius:14px; padding:16px; font-family:'Baloo 2',cursive; font-size:22px; font-weight:700; cursor:pointer; transition:all 0.15s; text-align:center; }
+.pin-key:active { transform:scale(0.92); background:var(--border); }
+.pin-error { color:var(--red); font-size:13px; text-align:center; margin-top:10px; font-weight:700; min-height:20px; }
+
+/* ── BOTTOM SHEET ── */
+.bottom-sheet { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:200; align-items:flex-end; justify-content:center; backdrop-filter:blur(3px); }
+.bottom-sheet.show { display:flex; }
+.sheet-body { background:white; border-radius:24px 24px 0 0; padding:24px 20px 40px; width:100%; max-width:560px; animation:slide-up 0.3s cubic-bezier(0.175,0.885,0.32,1.275); }
+@keyframes slide-up { from{transform:translateY(100%)} to{transform:translateY(0)} }
+.sheet-body h3 { font-family:'Baloo 2',cursive; font-size:20px; margin-bottom:16px; }
+.sheet-actions { display:flex; gap:10px; margin-top:16px; }
+.confirm-header { display:flex; align-items:center; gap:12px; margin-bottom:20px; }
+.confirm-badge { font-size:11px; font-weight:800; padding:4px 12px; border-radius:20px; }
+.confirm-badge.add { background:#D1FAE5; color:#065F46; }
+.confirm-badge.sub { background:#FEE2E2; color:#991B1B; }
+.confirm-badge.warn { background:#FEF9C3; color:#92400E; }
+.confirm-name { font-family:'Baloo 2',cursive; font-size:22px; font-weight:800; }
+.score-edit-row { display:flex; align-items:center; background:#F8FAFC; border-radius:16px; padding:14px 16px; gap:12px; margin-bottom:14px; }
+.score-edit-label { font-size:13px; font-weight:700; color:var(--muted); white-space:nowrap; }
+.score-edit-input { font-family:'Baloo 2',cursive; font-size:32px; font-weight:800; border:none; background:transparent; width:100%; outline:none; padding:0; }
+.score-edit-input.green { color:var(--green); }
+.score-edit-input.red { color:var(--red); }
+.score-edit-input.yellow { color:var(--yellow); }
 
   /* ── TOAST ── */
-  .toast {
-    position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px);
-    background: var(--text); color: white;
-    padding: 12px 24px; border-radius: 100px;
-    font-size: 14px; font-weight: 700;
-    opacity: 0; transition: all 0.3s;
-    z-index: 300; white-space: nowrap;
-    pointer-events: none;
-  }
-  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast { position:fixed; bottom:88px; left:50%; transform:translateX(-50%) translateY(10px); background:#1E293B; color:white; padding:12px 24px; border-radius:100px; font-size:14px; font-weight:700; opacity:0; transition:all 0.3s; z-index:400; white-space:nowrap; pointer-events:none; max-width:90vw; text-align:center; }
+.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
 
-  /* ── FORM MODAL ── */
-  .form-modal {
-    display: none;
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.5);
-    z-index: 200;
-    align-items: flex-end; justify-content: center;
-    backdrop-filter: blur(4px);
-  }
-  .form-modal.show { display: flex; }
-  .form-sheet {
-    background: white;
-    border-radius: 24px 24px 0 0;
-    padding: 24px 20px 40px;
-    width: 100%; max-width: 480px;
-    animation: slide-up 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  }
-  @keyframes slide-up {
-    from { transform: translateY(100%); }
-    to { transform: translateY(0); }
-  }
-  .form-sheet h3 { font-family: 'Baloo 2', cursive; font-size: 20px; margin-bottom: 16px; }
-  .form-actions { display: flex; gap: 10px; margin-top: 16px; }
-
-  /* ── LOADING ── */
-  .loading {
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    padding: 40px; color: var(--muted); gap: 12px;
-  }
-  .spinner {
-    width: 32px; height: 32px;
-    border: 3px solid var(--border);
-    border-top-color: var(--orange);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  .empty-state { text-align: center; padding: 32px; color: var(--muted); }
-  .empty-state .emoji { font-size: 48px; display: block; margin-bottom: 8px; }
-
-  .score-adjust-row { display: flex; align-items: center; gap: 10px; }
-  .score-adjust-row input { flex: 1; }
-
-  /* ── RECORD CONFIRM MODAL ── */
-  .confirm-modal {
-    display: none;
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.5);
-    z-index: 200;
-    align-items: flex-end; justify-content: center;
-    backdrop-filter: blur(4px);
-  }
-  .confirm-modal.show { display: flex; }
-  .confirm-sheet {
-    background: white;
-    border-radius: 24px 24px 0 0;
-    padding: 24px 20px 44px;
-    width: 100%; max-width: 480px;
-    animation: slide-up 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  }
-  .confirm-header {
-    display: flex; align-items: center; gap: 12px;
-    margin-bottom: 20px;
-  }
-  .confirm-type-badge {
-    font-size: 11px; font-weight: 800;
-    padding: 4px 12px; border-radius: 20px;
-    letter-spacing: 0.5px;
-  }
-  .confirm-type-badge.add { background: #D1FAE5; color: #065F46; }
-  .confirm-type-badge.sub { background: #FEE2E2; color: #991B1B; }
-  .confirm-type-badge.warn { background: #FEF9C3; color: #92400E; }
-  .confirm-name {
-    font-family: 'Baloo 2', cursive;
-    font-size: 22px; font-weight: 800;
-  }
-  .score-edit-row {
-    display: flex; align-items: center;
-    background: #F9FAFB; border-radius: 16px;
-    padding: 14px 16px; gap: 12px;
-    margin-bottom: 14px;
-  }
-  .score-edit-label { font-size: 13px; font-weight: 700; color: var(--muted); white-space: nowrap; }
-  .score-edit-input {
-    font-family: 'Baloo 2', cursive;
-    font-size: 28px; font-weight: 800;
-    border: none; background: transparent;
-    width: 100%; outline: none;
-    padding: 0;
-  }
-  .score-edit-input.green { color: var(--green); }
-  .score-edit-input.red { color: var(--red); }
-  .score-edit-input.yellow { color: #CA8A04; }
-
-  /* ── FIRST SETUP ── */
-  .setup-screen {
-    display: none;
-    position: fixed; inset: 0;
-    background: linear-gradient(135deg, #2563EB, #60A5FA);
-    z-index: 500;
-    align-items: center; justify-content: center;
-    padding: 24px;
-  }
-  .setup-screen.show { display: flex; }
-  .setup-box {
-    background: white;
-    border-radius: 24px;
-    padding: 32px 24px;
-    width: 100%; max-width: 340px;
-    text-align: center;
-  }
-  .setup-box .emoji { font-size: 56px; display: block; margin-bottom: 12px; }
-  .setup-box h2 { font-family: 'Baloo 2', cursive; font-size: 26px; margin-bottom: 8px; }
-  .setup-box p { color: var(--muted); font-size: 14px; margin-bottom: 24px; }
+/* ── MISC ── */
+.loading { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:40px; color:var(--muted); gap:12px; }
+.spinner { width:32px; height:32px; border:3px solid var(--border); border-top-color:var(--blue); border-radius:50%; animation:spin 0.8s linear infinite; }
+@keyframes spin { to{transform:rotate(360deg)} }
+.empty-state { text-align:center; padding:32px; color:var(--muted); }
+.empty-state .big-emoji { font-size:48px; display:block; margin-bottom:8px; }
+.score-adjust-row { display:flex; align-items:center; gap:10px; }
+.score-adjust-row input { flex:1; }
 </style>
 </head>
 <body>
+<div class="app-wrapper">
 
-<!-- ══════════════════════════════════
-     FIRST SETUP (PIN設定)
-══════════════════════════════════ -->
-<div class="setup-screen" id="setupScreen">
-  <div class="setup-box">
-    <span class="emoji">⭐</span>
-    <h2>歡迎使用 Jim 計分板</h2>
-    <p>請先設定一組4位數 PIN 碼，用來保護家長功能</p>
-    <div class="pin-dots" id="setupDots">
-      <div class="pin-dot"></div><div class="pin-dot"></div>
-      <div class="pin-dot"></div><div class="pin-dot"></div>
-    </div>
-    <div class="pin-pad" id="setupPad">
-      <button class="pin-key" onclick="setupPinKey('1')">1</button>
-      <button class="pin-key" onclick="setupPinKey('2')">2</button>
-      <button class="pin-key" onclick="setupPinKey('3')">3</button>
-      <button class="pin-key" onclick="setupPinKey('4')">4</button>
-      <button class="pin-key" onclick="setupPinKey('5')">5</button>
-      <button class="pin-key" onclick="setupPinKey('6')">6</button>
-      <button class="pin-key" onclick="setupPinKey('7')">7</button>
-      <button class="pin-key" onclick="setupPinKey('8')">8</button>
-      <button class="pin-key" onclick="setupPinKey('9')">9</button>
-      <button class="pin-key" style="visibility:hidden"></button>
-      <button class="pin-key" onclick="setupPinKey('0')">0</button>
-      <button class="pin-key del" onclick="setupPinDel()">⌫</button>
-    </div>
-    <div class="pin-error" id="setupError"></div>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════
-     PIN MODAL
-══════════════════════════════════ -->
+<!-- PIN MODAL -->
 <div class="modal-overlay" id="pinModal">
   <div class="modal">
-    <h2 id="pinModalTitle">🔐 家長驗證</h2>
-    <p id="pinModalDesc">請輸入 PIN 碼</p>
+    <h2>🔐 家長驗證</h2>
+    <p>請輸入 PIN 碼</p>
     <div class="pin-dots" id="pinDots">
       <div class="pin-dot"></div><div class="pin-dot"></div>
       <div class="pin-dot"></div><div class="pin-dot"></div>
@@ -522,157 +248,129 @@
       <button class="pin-key" onclick="pinKey('7')">7</button>
       <button class="pin-key" onclick="pinKey('8')">8</button>
       <button class="pin-key" onclick="pinKey('9')">9</button>
-      <button class="pin-key btn-gray" id="pinCancelBtn" onclick="closePinModal()">取消</button>
+      <button class="pin-key btn-gray" onclick="closePinModal()">取消</button>
       <button class="pin-key" onclick="pinKey('0')">0</button>
-      <button class="pin-key del" onclick="pinDel()">⌫</button>
+      <button class="pin-key" onclick="pinDel()">⌫</button>
     </div>
     <div class="pin-error" id="pinError"></div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════
-     BEHAVIOR FORM MODAL
-══════════════════════════════════ -->
-<div class="form-modal" id="behaviorFormModal">
-  <div class="form-sheet">
-    <h3 id="behaviorFormTitle">新增行為項目</h3>
-    <div class="input-group">
-      <label>行為名稱</label>
-      <input type="text" id="bName" placeholder="例如：完成作業">
+<!-- CONFIRM SHEET -->
+<div class="bottom-sheet" id="confirmSheet">
+  <div class="sheet-body">
+    <div class="confirm-header">
+      <span class="confirm-badge" id="confirmBadge">加分</span>
+      <span class="confirm-name" id="confirmName"></span>
     </div>
+    <div class="score-edit-row">
+      <span class="score-edit-label">分數</span>
+      <input class="score-edit-input green" id="confirmScore" type="number" min="0">
+    </div>
+    <div class="input-group">
+      <label>原因／備註（選填）</label>
+      <input type="text" id="confirmNote" placeholder="例如：今天特別認真！">
+    </div>
+    <div class="sheet-actions">
+      <button class="btn btn-gray" onclick="closeConfirmSheet()">取消</button>
+      <button class="btn btn-primary" id="confirmBtn" onclick="submitRecord()">✅ 確認送出</button>
+    </div>
+  </div>
+</div>
+
+<!-- BEHAVIOR FORM -->
+<div class="bottom-sheet" id="behaviorSheet">
+  <div class="sheet-body">
+    <h3 id="behaviorFormTitle">新增行為項目</h3>
+    <div class="input-group"><label>行為名稱</label><input type="text" id="bName" placeholder="例如：完成作業"></div>
     <div class="input-group">
       <label>類型 & 分數</label>
       <div class="input-row">
-        <select id="bType">
-          <option value="加分">✅ 加分</option>
-          <option value="扣分">➖ 扣分</option>
-          <option value="警告">⚠️ 警告</option>
-        </select>
-        <input type="number" id="bScore" placeholder="分數" style="width:90px">
-      </div>
+        <select id="bType"><option value="加分">✅ 加分</option><option value="扣分">➖ 扣分</option><option value="警告">⚠️ 警告</option></select>
+        <input type="number" id="bScore" placeholder="分數" style="max-width:110px">
     </div>
-    <div class="form-actions">
-      <button class="btn btn-gray" onclick="closeBehaviorForm()">取消</button>
+    </div>
+    <div class="sheet-actions">
+      <button class="btn btn-gray" onclick="closeBehaviorSheet()">取消</button>
       <button class="btn btn-primary" onclick="saveBehavior()">儲存</button>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════
-     RECORD CONFIRM MODAL
-══════════════════════════════════ -->
-<div class="confirm-modal" id="recordConfirmModal">
-  <div class="confirm-sheet">
-    <div class="confirm-header">
-      <span class="confirm-type-badge" id="confirmBadge">加分</span>
-      <span class="confirm-name" id="confirmName">完成作業</span>
-    </div>
-    <div class="score-edit-row">
-      <span class="score-edit-label">分數</span>
-      <input class="score-edit-input green" id="confirmScoreInput" type="number" placeholder="0">
-    </div>
-    <div class="input-group">
-      <label>原因／備註（選填）</label>
-      <input type="text" id="confirmNote" placeholder="例如：今天特別認真，加倍給分！">
-    </div>
-    <div class="form-actions">
-      <button class="btn btn-gray" onclick="closeConfirmModal()">取消</button>
-      <button class="btn btn-primary" id="confirmSubmitBtn" onclick="submitConfirm()">確認送出</button>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════
-     REWARD FORM MODAL
-══════════════════════════════════ -->
-<div class="form-modal" id="rewardFormModal">
-  <div class="form-sheet">
+<!-- REWARD FORM -->
+<div class="bottom-sheet" id="rewardSheet">
+  <div class="sheet-body">
     <h3 id="rewardFormTitle">新增獎勵項目</h3>
-    <div class="input-group">
-      <label>獎勵名稱</label>
-      <input type="text" id="rName" placeholder="例如：看一集卡通">
-    </div>
-    <div class="input-group">
-      <label>所需分數</label>
-      <input type="number" id="rScore" placeholder="例如：20">
-    </div>
-    <div class="form-actions">
-      <button class="btn btn-gray" onclick="closeRewardForm()">取消</button>
+    <div class="input-group"><label>獎勵名稱</label><input type="text" id="rName" placeholder="例如：看一集卡通"></div>
+    <div class="input-group"><label>所需分數</label><input type="number" id="rScore" placeholder="例如：20"></div>
+    <div class="sheet-actions">
+      <button class="btn btn-gray" onclick="closeRewardSheet()">取消</button>
       <button class="btn btn-green" onclick="saveReward()">儲存</button>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════
-     TOAST
-══════════════════════════════════ -->
 <div class="toast" id="toast"></div>
 
-<!-- ══════════════════════════════════
-     SCREEN 1: 首頁
-══════════════════════════════════ -->
+<!-- SCREEN: 首頁 -->
 <div class="screen active" id="screen-home">
-  <div class="header">
+  <div class="page-header">
     <h1>⭐ Jim 計分板</h1>
-    <p id="homeDate">Jim，今天也要加油喔！</p>
+    <p id="homeDate">今天也要加油喔！</p>
   </div>
   <div class="score-hero">
     <div class="score-label">目前積分</div>
     <div class="score-number" id="homeScore">—</div>
     <div class="score-unit">分</div>
+    <div class="progress-wrap" id="progressWrap" style="display:none">
+      <div class="progress-label">
+        <span id="progressFrom">0 分</span>
+        <span id="progressTo"></span>
   </div>
-
-  <div class="section" style="margin-top:20px">
-    <div class="section-title">🎯 快速記錄</div>
-    <div class="behavior-grid" id="behaviorGrid">
-      <div class="loading"><div class="spinner"></div></div>
+      <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+      <div class="progress-hint" id="progressHint"></div>
     </div>
   </div>
-
   <div class="section" style="margin-top:20px">
     <div class="section-title">📋 最近紀錄</div>
-    <div class="record-list" id="recordList">
-      <div class="loading"><div class="spinner"></div></div>
-    </div>
+    <div class="record-list" id="recordList"><div class="loading"><div class="spinner"></div><span>載入中...</span></div></div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════
-     SCREEN 2: 獎勵商店
-══════════════════════════════════ -->
+<!-- SCREEN: 獎勵 -->
 <div class="screen" id="screen-rewards">
-  <div class="header" style="background: linear-gradient(135deg, #F59E0B, #FBBF24)">
+  <div class="page-header" style="background:linear-gradient(135deg,#F59E0B,#FBBF24)">
     <h1>🎁 獎勵商店</h1>
-    <p>目前有 <span id="rewardScore">—</span> 分可以兌換</p>
+    <p>目前有 <span id="rewardScore">—</span> 分，可以換什麼？</p>
   </div>
-  <div style="margin:-20px 20px 0; background:white; border-radius:var(--radius); padding:16px; box-shadow:var(--shadow); position:relative; z-index:2; margin-bottom:0">
-    <div style="text-align:center; font-size:13px; color:var(--muted); font-weight:700">
-      💡 集滿分數就可以兌換喜歡的獎勵！
+  <div class="section" style="margin-top:24px">
+    <div class="reward-grid" id="rewardGrid"><div class="loading"><div class="spinner"></div><span>載入中...</span></div></div>
     </div>
   </div>
-  <div class="section" style="margin-top:20px">
-    <div class="reward-grid" id="rewardGrid">
-      <div class="loading"><div class="spinner"></div></div>
+
+<!-- SCREEN: 集點 -->
+<div class="screen" id="screen-collect">
+  <div class="page-header">
+    <h1>⭐ 集點記錄</h1>
+    <p>選擇行為，幫 Jim 加減分</p>
     </div>
+  <div class="section" style="margin-top:24px">
+    <div class="behavior-grid" id="behaviorGrid"><div class="loading" style="grid-column:1/-1"><div class="spinner"></div><span>載入中...</span></div></div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════
-     SCREEN 3: 家長後台
-══════════════════════════════════ -->
+<!-- SCREEN: 家長後台 -->
 <div class="screen" id="screen-admin">
   <div class="admin-header">
     <h1>🔐 家長後台</h1>
     <p>管理行為項目、獎勵與設定</p>
   </div>
-
-  <!-- 調整總分 -->
   <div class="admin-section" style="margin-top:16px">
     <div class="admin-section-title">⚡ 總分調整</div>
     <div style="padding:16px">
-      <div style="text-align:center; margin-bottom:12px">
-        <span style="font-size:13px; color:var(--muted)">目前總分：</span>
-        <span style="font-family:'Baloo 2',cursive; font-size:28px; color:var(--orange)" id="adminScore">—</span>
+      <div style="text-align:center;margin-bottom:12px">
+        <span style="font-size:13px;color:var(--muted)">目前總分：</span>
+        <span style="font-family:'Baloo 2',cursive;font-size:28px;color:var(--blue)" id="adminScore">—</span>
         <span style="color:var(--muted)"> 分</span>
       </div>
       <div class="score-adjust-row">
@@ -681,661 +379,357 @@
       </div>
     </div>
   </div>
-
-  <!-- 行為項目管理 -->
   <div class="admin-section">
-    <div class="admin-section-title">
-      🎯 行為項目
-      <button class="btn btn-primary btn-sm" style="margin-left:auto" onclick="openAddBehavior()">＋ 新增</button>
+    <div class="admin-section-title">🎯 行為項目 <button class="btn btn-primary btn-sm" style="margin-left:auto" onclick="openAddBehavior()">＋ 新增</button></div>
+    <div id="adminBehaviorList"><div class="loading"><div class="spinner"></div></div></div>
     </div>
-    <div id="adminBehaviorList">
-      <div class="loading"><div class="spinner"></div></div>
-    </div>
-  </div>
-
-  <!-- 獎勵項目管理 -->
   <div class="admin-section">
-    <div class="admin-section-title">
-      🎁 獎勵項目
-      <button class="btn btn-green btn-sm" style="margin-left:auto" onclick="openAddReward()">＋ 新增</button>
+    <div class="admin-section-title">🎁 獎勵項目 <button class="btn btn-green btn-sm" style="margin-left:auto" onclick="openAddReward()">＋ 新增</button></div>
+    <div id="adminRewardList"><div class="loading"><div class="spinner"></div></div></div>
     </div>
-    <div id="adminRewardList">
-      <div class="loading"><div class="spinner"></div></div>
-    </div>
-  </div>
-
-  <!-- PIN設定 -->
-  <div class="admin-section" style="margin-bottom:20px">
+  <div class="admin-section" style="margin-bottom:24px">
     <div class="admin-section-title">🔑 修改 PIN 碼</div>
-    <div style="padding:16px; display:flex; gap:10px">
+    <div style="padding:16px;display:flex;gap:10px">
       <input type="password" id="newPinInput" placeholder="輸入新的4位數PIN" maxlength="4" style="flex:1">
       <button class="btn btn-purple btn-sm" onclick="doUpdatePin()">更新</button>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════
-     BOTTOM NAV
-══════════════════════════════════ -->
+<!-- BOTTOM NAV -->
 <nav class="bottom-nav">
   <button class="nav-btn active" id="nav-home" onclick="showScreen('home')">
-    <span class="icon">🏠</span>首頁
+    <span class="icon">🏠</span><span>首頁</span>
   </button>
   <button class="nav-btn" id="nav-rewards" onclick="showScreen('rewards')">
-    <span class="icon">🎁</span>獎勵
+    <span class="icon">🎁</span><span>獎勵</span>
+  </button>
+  <button class="nav-btn collect-nav" id="nav-collect" onclick="requirePin('collect')">
+    <div class="icon-wrap"><span style="font-size:26px">⭐</span></div>
+    <span class="clabel">集點</span>
   </button>
   <button class="nav-btn" id="nav-admin" onclick="requirePin('admin')">
-    <span class="icon">🔐</span>家長
+    <span class="icon">🔐</span><span>家長</span>
   </button>
 </nav>
 
-<script>
-// ══════════════════════════════════
-// CONFIG
-// ══════════════════════════════════
-const API_URL = 'https://script.google.com/macros/s/AKfycbxPeXtpUU4AJCVaPRyTuMSQaBc0zp35JGBSH58QbDIrGKkGn96tWWhUSv1mME5Hfc75kw/exec';
+</div>
 
-// ══════════════════════════════════
-// STATE
-// ══════════════════════════════════
+<script>
+const API_URL = 'https://script.google.com/macros/s/AKfycbygTRoYhiLKqYmi9eM6J4bTBHIY1A2cz_vYG3PUHgB4Hn5gooArylWuZeSJCDYRTAKSZg/exec';
+
 let currentScore = 0;
 let behaviors = [];
 let rewards = [];
 let pinCallback = null;
-let currentPinInput = '';
-let editingBehaviorIndex = null;
-let editingRewardIndex = null;
-let setupPin = '';
-let isAdminUnlocked = false;
-let isSessionUnlocked = false; // 本次開啟是否已驗證過
+let pinStr = '';
+let pendingBehavior = null;
+let editBehaviorIndex = null;
+let editRewardIndex = null;
 
-// ══════════════════════════════════
-// INIT
-// ══════════════════════════════════
-window.addEventListener('DOMContentLoaded', async () => {
-  updateDateDisplay();
-  const settings = await api('getSettings');
-  if (!settings || !settings.success) {
-    showToast('⚠️ 無法連線，請檢查網路');
-    return;
-  }
-  // 首次設定（PIN還是預設1234）
-  if (settings.pin == '1234') {
-    document.getElementById('setupScreen').classList.add('show');
-  } else {
-    // 每次開啟都需要先驗證一次PIN才能使用
-    requirePin('session_unlock');
-  }
+// ── INIT ──
+window.addEventListener('DOMContentLoaded', () => {
+  updateDate();
+  loadHome();
 });
 
-function updateDateDisplay() {
+function updateDate() {
   const days = ['日','一','二','三','四','五','六'];
   const now = new Date();
-  const str = `${now.getMonth()+1}月${now.getDate()}日（週${days[now.getDay()]}）`;
-  document.getElementById('homeDate').textContent = str;
+  document.getElementById('homeDate').textContent = `${now.getMonth()+1}月${now.getDate()}日（週${days[now.getDay()]}）`;
 }
 
-// ══════════════════════════════════
-// API HELPER
-// ══════════════════════════════════
+// ── API ──
 async function api(action, params = {}) {
   try {
     const qs = new URLSearchParams({ action, ...params }).toString();
     const res = await fetch(`${API_URL}?${qs}`);
     return await res.json();
-  } catch (e) {
+  } catch(e) {
     showToast('❌ 連線失敗，請稍後再試');
     return null;
   }
 }
 
-// ══════════════════════════════════
-// SETUP PIN (首次設定)
-// ══════════════════════════════════
-function setupPinKey(k) {
-  if (setupPin.length >= 4) return;
-  setupPin += k;
-  updateSetupDots();
-  if (setupPin.length === 4) {
-    setTimeout(async () => {
-      const res = await api('updatePin', { newPin: setupPin });
-      if (res && res.success) {
-        document.getElementById('setupScreen').classList.remove('show');
-        showToast('✅ PIN 設定完成！');
-        loadHome();
-      } else {
-        document.getElementById('setupError').textContent = '設定失敗，請重試';
-        setupPin = '';
-        updateSetupDots();
-      }
-    }, 200);
-  }
-}
-function setupPinDel() {
-  setupPin = setupPin.slice(0, -1);
-  updateSetupDots();
-}
-function updateSetupDots() {
-  document.querySelectorAll('#setupDots .pin-dot').forEach((d, i) => {
-    d.classList.toggle('filled', i < setupPin.length);
-  });
-}
-
-// ══════════════════════════════════
-// NAVIGATION
-// ══════════════════════════════════
+// ── NAV ──
 function showScreen(name) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('screen-' + name).classList.add('active');
   document.getElementById('nav-' + name).classList.add('active');
-
   if (name === 'home') loadHome();
   if (name === 'rewards') loadRewards();
+  if (name === 'collect') loadCollect();
   if (name === 'admin') loadAdmin();
 }
 
-// ══════════════════════════════════
-// PIN MODAL
-// ══════════════════════════════════
-let currentPinStr = '';
-function requirePin(action) {
-  currentPinStr = '';
+// ── PIN ──
+function requirePin(cb) {
+  pinStr = ''; pinCallback = cb;
   updatePinDots();
   document.getElementById('pinError').textContent = '';
   document.getElementById('pinModal').classList.add('show');
-  pinCallback = action;
-
-  // 開啟App時的解鎖，不顯示取消按鈕
-  const isSessionUnlock = action === 'session_unlock';
-  document.getElementById('pinCancelBtn').style.visibility = isSessionUnlock ? 'hidden' : 'visible';
-  document.getElementById('pinModalTitle').textContent = isSessionUnlock ? '👋 歡迎回來！' : '🔐 家長驗證';
-  document.getElementById('pinModalDesc').textContent = isSessionUnlock ? '請輸入 PIN 碼開始使用' : '請輸入 PIN 碼';
 }
-function closePinModal() {
-  document.getElementById('pinModal').classList.remove('show');
-  currentPinStr = '';
-}
+function closePinModal() { document.getElementById('pinModal').classList.remove('show'); pinStr = ''; }
 function pinKey(k) {
-  if (currentPinStr.length >= 4) return;
-  currentPinStr += k;
-  updatePinDots();
-  if (currentPinStr.length === 4) {
-    setTimeout(verifyPin, 150);
-  }
+  if (pinStr.length >= 4) return;
+  pinStr += k; updatePinDots();
+  if (pinStr.length === 4) setTimeout(verifyPin, 150);
 }
-function pinDel() {
-  currentPinStr = currentPinStr.slice(0, -1);
-  updatePinDots();
-}
+function pinDel() { pinStr = pinStr.slice(0,-1); updatePinDots(); }
 function updatePinDots() {
-  document.querySelectorAll('#pinDots .pin-dot').forEach((d, i) => {
-    d.classList.toggle('filled', i < currentPinStr.length);
-  });
+  document.querySelectorAll('#pinDots .pin-dot').forEach((d,i) => d.classList.toggle('filled', i < pinStr.length));
 }
 async function verifyPin() {
-  const res = await api('checkPin', { pin: currentPinStr });
+  const res = await api('checkPin', { pin: pinStr });
   if (res && res.success) {
     closePinModal();
-    isAdminUnlocked = true;
+    if (pinCallback === 'collect' || pinCallback === 'admin') {
     showScreen(pinCallback);
+    } else if (pinCallback && pinCallback.startsWith('redeem|')) {
+      const parts = pinCallback.split('|');
+      doRedeem(decodeURIComponent(parts[1]), parseInt(parts[2]));
+    }
   } else {
     document.getElementById('pinError').textContent = '❌ PIN 碼錯誤，請再試一次';
-    currentPinStr = '';
-    updatePinDots();
+    pinStr = ''; updatePinDots();
   }
 }
 
-// ══════════════════════════════════
-// HOME SCREEN
-// ══════════════════════════════════
+// ── HOME ──
 async function loadHome() {
-  const [scoreRes, behaviorRes, recordRes] = await Promise.all([
-    api('getScore'),
-    api('getBehaviors'),
-    api('getRecords')
+  const [scoreRes, rewardRes, recordRes] = await Promise.all([
+    api('getScore'), api('getRewards'), api('getRecords')
   ]);
-
-  if (scoreRes && scoreRes.success) {
-    currentScore = scoreRes.score;
-    document.getElementById('homeScore').textContent = currentScore;
-  }
-
-  if (behaviorRes && behaviorRes.success) {
-    behaviors = behaviorRes.behaviors;
-    renderBehaviorGrid();
-  }
-
-  if (recordRes && recordRes.success) {
-    renderRecords(recordRes.records);
-  }
+  if (scoreRes?.success) { currentScore = scoreRes.score; document.getElementById('homeScore').textContent = currentScore; }
+  if (rewardRes?.success) { rewards = rewardRes.rewards.filter(r => r.status === '上架'); renderProgress(); }
+  if (recordRes?.success) renderRecords(recordRes.records);
 }
 
-function renderBehaviorGrid() {
-  const grid = document.getElementById('behaviorGrid');
-  if (!behaviors.length) {
-    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><span class="emoji">📝</span>尚無行為項目</div>';
-    return;
-  }
-  grid.innerHTML = behaviors.map(b => {
-    const cls = b.type === '加分' ? 'add' : b.type === '扣分' ? 'sub' : 'warn';
-    const prefix = b.score > 0 ? '+' : '';
-    const display = b.type === '警告' ? '⚠️' : `${prefix}${b.score}`;
-    return `<button class="behavior-btn ${cls}" onclick="openConfirmModal(${b.index})">
-      <span class="b-score">${display}</span>
-      <span class="b-name">${b.name}</span>
-    </button>`;
-  }).join('');
+function renderProgress() {
+  const wrap = document.getElementById('progressWrap');
+  const sorted = [...rewards].sort((a,b) => a.score - b.score);
+  const next = sorted.find(r => r.score > currentScore);
+  if (!next) { wrap.style.display = 'none'; return; }
+  wrap.style.display = 'block';
+  const prev = sorted.filter(r => r.score <= currentScore).pop();
+  const from = prev ? prev.score : 0;
+  const pct = Math.min(100, Math.round(((currentScore - from) / (next.score - from)) * 100));
+  document.getElementById('progressFrom').textContent = from + ' 分';
+  document.getElementById('progressTo').textContent = next.name + ' ' + next.score + ' 分';
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressHint').textContent = `再 ${next.score - currentScore} 分就可以兌換「${next.name}」！`;
 }
 
 function renderRecords(records) {
   const list = document.getElementById('recordList');
-  if (!records || !records.length) {
-    list.innerHTML = '<div class="empty-state"><span class="emoji">🌟</span>還沒有紀錄，快去記錄好行為吧！</div>';
+  if (!records?.length) {
+    list.innerHTML = '<div class="empty-state"><span class="big-emoji">🌟</span>還沒有紀錄，快去集點吧！</div>';
     return;
   }
-  list.innerHTML = records.slice(0, 10).map(r => {
-    const icon = r.type === '加分' ? '⭐' : r.type === '扣分' ? '😔' : '⚠️';
-    const cls = r.score > 0 ? 'pos' : r.score < 0 ? 'neg' : 'zero';
-    const prefix = r.score > 0 ? '+' : '';
-    const scoreDisplay = r.type === '警告' ? '⚠️' : `${prefix}${r.score}`;
-    const noteHtml = r.note ? `<div style="font-size:11px;color:var(--muted);margin-top:2px">📝 ${r.note}</div>` : '';
+  list.innerHTML = records.slice(0,15).map(r => {
+    const icon = r.type==='加分'?'⭐':r.type==='扣分'?'😔':r.type==='兌換'?'🎁':'⚠️';
+    const s = Number(r.score);
+    const cls = s>0?'pos':s<0?'neg':'zero';
+    const scoreDisplay = r.type==='警告' ? '⚠️' : (s>0?'+':'')+s;
     return `<div class="record-item">
       <div class="record-icon">${icon}</div>
       <div class="record-info">
         <div class="record-name">${r.name}</div>
         <div class="record-time">${r.time}</div>
-        ${noteHtml}
+        ${r.note ? `<div class="record-note">📝 ${r.note}</div>` : ''}
       </div>
       <div class="record-score ${cls}">${scoreDisplay}</div>
     </div>`;
   }).join('');
 }
 
-// ── CONFIRM MODAL ──
-let pendingBehavior = null;
-
-function openConfirmModal(index) {
-  const b = behaviors.find(bh => bh.index === index);
-  if (!b) return;
-  pendingBehavior = b;
-
-  const cls = b.type === '加分' ? 'add' : b.type === '扣分' ? 'sub' : 'warn';
-  const badge = document.getElementById('confirmBadge');
-  badge.textContent = b.type;
-  badge.className = 'confirm-type-badge ' + cls;
-
-  document.getElementById('confirmName').textContent = b.name;
-  document.getElementById('confirmNote').value = '';
-
-  const scoreInput = document.getElementById('confirmScoreInput');
-  scoreInput.className = 'score-edit-input ' + (b.type === '加分' ? 'green' : b.type === '扣分' ? 'red' : 'yellow');
-
-  if (b.type === '警告') {
-    scoreInput.value = 0;
-    scoreInput.disabled = true;
-  } else {
-    scoreInput.value = Math.abs(b.score);
-    scoreInput.disabled = false;
-  }
-
-  const submitBtn = document.getElementById('confirmSubmitBtn');
-  submitBtn.className = 'btn ' + (b.type === '加分' ? 'btn-green' : b.type === '扣分' ? 'btn-primary' : 'btn-gray');
-  submitBtn.style.background = b.type === '警告' ? '#CA8A04' : '';
-
-  document.getElementById('recordConfirmModal').classList.add('show');
-}
-
-function closeConfirmModal() {
-  document.getElementById('recordConfirmModal').classList.remove('show');
-  pendingBehavior = null;
-}
-
-function submitConfirm() {
-  if (!pendingBehavior) return;
-  closeConfirmModal();
-  // Session已解鎖，直接送出不需再輸PIN
-  recordBehavior(pendingBehavior);
-}
-
-// Require PIN before recording behavior
-function requirePinForBehavior(index) {
-  requirePin('behavior_' + index);
-}
-
-// Override requirePin to handle behavior recording
-const _origRequirePin = requirePin;
-async function verifyPinOverride() {
-  const res = await api('checkPin', { pin: currentPinStr });
-  if (res && res.success) {
-    closePinModal();
-    if (pinCallback === 'behavior_confirm') {
-      if (pendingBehavior) await recordBehavior(pendingBehavior);
-    } else {
-      isAdminUnlocked = true;
-      showScreen(pinCallback);
-    }
-  } else {
-    document.getElementById('pinError').textContent = '❌ PIN 碼錯誤，請再試一次';
-    currentPinStr = '';
-    updatePinDots();
-  }
-}
-// Patch verifyPin
-window.verifyPin = verifyPinOverride;
-
-async function recordBehavior(b) {
-  // Read custom score and note from confirm modal (if still available) or fallback to default
-  const scoreInput = document.getElementById('confirmScoreInput');
-  const noteInput = document.getElementById('confirmNote');
-  let score = b.type === '警告' ? 0 : (parseInt(scoreInput.value) || Math.abs(b.score));
-  if (b.type === '扣分') score = -Math.abs(score);
-  const note = noteInput ? noteInput.value.trim() : '';
-
-  showToast('⏳ 記錄中...');
-  const res = await api('addRecord', {
-    name: b.name,
-    score: score,
-    type: b.type,
-    note: note
-  });
-  if (res && res.success) {
-    currentScore = res.newScore;
-    document.getElementById('homeScore').textContent = currentScore;
-    const verb = b.type === '警告' ? '⚠️ 警告記錄' : score > 0 ? `+${score} 分！` : `${score} 分`;
-    showToast(`${b.type === '加分' ? '⭐' : b.type === '扣分' ? '😔' : '⚠️'} ${b.name} ${verb}`);
-    pendingBehavior = null;
-    const recordRes = await api('getRecords');
-    if (recordRes && recordRes.success) renderRecords(recordRes.records);
-  }
-}
-
-// ══════════════════════════════════
-// REWARDS SCREEN
-// ══════════════════════════════════
+// ── REWARDS ──
 async function loadRewards() {
-  const [scoreRes, rewardRes] = await Promise.all([
-    api('getScore'),
-    api('getRewards')
-  ]);
-
-  if (scoreRes && scoreRes.success) {
-    currentScore = scoreRes.score;
-    document.getElementById('rewardScore').textContent = currentScore;
-  }
-
-  if (rewardRes && rewardRes.success) {
-    rewards = rewardRes.rewards.filter(r => r.status === '上架');
-    renderRewards();
-  }
+  const [sRes, rRes] = await Promise.all([api('getScore'), api('getRewards')]);
+  if (sRes?.success) { currentScore = sRes.score; document.getElementById('rewardScore').textContent = currentScore; }
+  if (rRes?.success) { rewards = rRes.rewards.filter(r => r.status==='上架'); renderRewards(); }
 }
-
 function renderRewards() {
   const grid = document.getElementById('rewardGrid');
-  if (!rewards.length) {
-    grid.innerHTML = '<div class="empty-state"><span class="emoji">🎁</span>還沒有獎勵，請家長去後台新增！</div>';
-    return;
-  }
+  if (!rewards.length) { grid.innerHTML='<div class="empty-state"><span class="big-emoji">🎁</span>尚無獎勵，請家長後台新增！</div>'; return; }
   const emojis = ['🍭','🎮','🎢','🍕','📚','🎨','🎯','🏆','🎪','🌈'];
-  grid.innerHTML = rewards.map((r, i) => {
-    const canAfford = currentScore >= r.score;
-    return `<div class="reward-item ${canAfford ? 'affordable' : 'locked'}">
-      <div class="reward-emoji">${emojis[i % emojis.length]}</div>
+  grid.innerHTML = [...rewards].sort((a,b)=>a.score-b.score).map((r,i) => {
+    const can = currentScore >= r.score;
+    return `<div class="reward-item ${can?'affordable':'locked'}">
+      <div class="reward-emoji">${emojis[i%emojis.length]}</div>
       <div class="reward-info">
         <div class="reward-name">${r.name}</div>
-        <div class="reward-cost">需要 ${r.score} 分</div>
+        <div class="reward-cost">需要 ${r.score} 分${can?' ✅':''}</div>
       </div>
-      ${canAfford
-        ? `<button class="redeem-btn" onclick="redeemReward(${r.index}, '${r.name}', ${r.score})">兌換！</button>`
-        : `<span class="lock-icon">🔒</span>`
-      }
+      ${can ? `<button class="redeem-btn" onclick="startRedeem('${encodeURIComponent(r.name)}',${r.score})">兌換！</button>`
+             : `<span style="font-size:20px;color:var(--muted)">🔒</span>`}
     </div>`;
   }).join('');
 }
-
-async function redeemReward(index, name, cost) {
-  requirePin('redeem_' + index + '_' + cost + '_' + encodeURIComponent(name));
+function startRedeem(name, cost) { requirePin(`redeem|${name}|${cost}`); }
+async function doRedeem(name, cost) {
+  const res = await api('redeemReward', { name, cost });
+  if (res?.success) {
+    currentScore = res.newScore;
+    document.getElementById('homeScore').textContent = currentScore;
+    document.getElementById('rewardScore').textContent = currentScore;
+    showToast(`🎉 已兌換：${name}！`);
+    renderRewards(); renderProgress();
+    const rr = await api('getRecords');
+    if (rr?.success) renderRecords(rr.records);
+  } else showToast(res?.message || '兌換失敗');
 }
 
-// Patch for redeem
-const _prevVerify = window.verifyPin;
-window.verifyPin = async function() {
-  const res = await api('checkPin', { pin: currentPinStr });
-  if (res && res.success) {
-    closePinModal();
-    if (pinCallback === 'session_unlock') {
-      isSessionUnlocked = true;
-      showToast('✅ 解鎖成功！');
-      loadHome();
-    } else if (pinCallback && pinCallback.startsWith('redeem_')) {
-      const parts = pinCallback.split('_');
-      const cost = parseInt(parts[2]);
-      const name = decodeURIComponent(parts.slice(3).join('_'));
-      const redeemRes = await api('redeemReward', { name, cost });
-      if (redeemRes && redeemRes.success) {
-        currentScore = redeemRes.newScore;
-        document.getElementById('rewardScore').textContent = currentScore;
-        document.getElementById('homeScore').textContent = currentScore;
-        showToast(`🎉 已兌換：${name}！`);
-        loadRewards();
-      } else {
-        showToast(redeemRes ? redeemRes.message : '兌換失敗');
+// ── COLLECT ──
+async function loadCollect() {
+  const res = await api('getBehaviors');
+  if (res?.success) { behaviors = res.behaviors; renderBehaviorGrid(); }
+}
+function renderBehaviorGrid() {
+  const grid = document.getElementById('behaviorGrid');
+  if (!behaviors.length) { grid.innerHTML='<div class="empty-state" style="grid-column:1/-1"><span class="big-emoji">📝</span>尚無行為項目，請至家長後台新增</div>'; return; }
+  grid.innerHTML = behaviors.map(b => {
+    const cls = b.type==='加分'?'add':b.type==='扣分'?'sub':'warn';
+    const s = Number(b.score);
+    const display = b.type==='警告' ? '⚠️' : (s>0?'+':'')+s;
+    return `<button class="behavior-btn ${cls}" onclick="openConfirm(${b.index})">
+      <span class="b-score">${display}</span>
+      <span class="b-name">${b.name}</span>
+    </button>`;
+  }).join('');
+}
+function openConfirm(index) {
+  const b = behaviors.find(bh => bh.index===index);
+  if (!b) return;
+  pendingBehavior = b;
+  const cls = b.type==='加分'?'add':b.type==='扣分'?'sub':'warn';
+  const badge = document.getElementById('confirmBadge');
+  badge.textContent = b.type; badge.className = 'confirm-badge '+cls;
+  document.getElementById('confirmName').textContent = b.name;
+  document.getElementById('confirmNote').value = '';
+  const si = document.getElementById('confirmScore');
+  si.className = 'score-edit-input '+(b.type==='加分'?'green':b.type==='扣分'?'red':'yellow');
+  si.value = Math.abs(Number(b.score));
+  si.disabled = b.type==='警告';
+  const btn = document.getElementById('confirmBtn');
+  btn.className = 'btn '+(b.type==='加分'?'btn-green':b.type==='扣分'?'btn-red':'btn-gray');
+  document.getElementById('confirmSheet').classList.add('show');
       }
-    } else if (pinCallback === 'behavior_confirm') {
-      if (pendingBehavior) await recordBehavior(pendingBehavior);
-    } else {
-      isAdminUnlocked = true;
-      showScreen(pinCallback);
-    }
-  } else {
-    document.getElementById('pinError').textContent = '❌ PIN 碼錯誤，請再試一次';
-    currentPinStr = '';
-    updatePinDots();
-  }
-};
-
-// ══════════════════════════════════
-// ADMIN SCREEN
-// ══════════════════════════════════
-async function loadAdmin() {
-  const [scoreRes, behaviorRes, rewardRes] = await Promise.all([
-    api('getScore'),
-    api('getBehaviors'),
-    api('getRewards')
-  ]);
-
-  if (scoreRes && scoreRes.success) {
-    currentScore = scoreRes.score;
-    document.getElementById('adminScore').textContent = currentScore;
-  }
-
-  if (behaviorRes && behaviorRes.success) {
-    behaviors = behaviorRes.behaviors;
-    renderAdminBehaviors();
-  }
-
-  if (rewardRes && rewardRes.success) {
-    rewards = rewardRes.rewards;
-    renderAdminRewards();
-  }
+function closeConfirmSheet() { document.getElementById('confirmSheet').classList.remove('show'); pendingBehavior=null; }
+async function submitRecord() {
+  if (!pendingBehavior) return;
+  const b = pendingBehavior;
+  let score = b.type==='警告' ? 0 : (parseInt(document.getElementById('confirmScore').value)||0);
+  if (b.type==='扣分') score = -Math.abs(score);
+  const note = document.getElementById('confirmNote').value.trim();
+  closeConfirmSheet();
+  showToast('⏳ 記錄中...');
+  const res = await api('addRecord', { name:b.name, score, type:b.type, note });
+  if (res?.success) {
+    currentScore = res.newScore;
+    document.getElementById('homeScore').textContent = currentScore;
+    const verb = b.type==='警告'?'已記錄警告':score>0?`+${score} 分！`:`${score} 分`;
+    showToast(`${b.type==='加分'?'⭐':b.type==='扣分'?'😔':'⚠️'} ${b.name}　${verb}`);
+    renderProgress();
+    const rr = await api('getRecords');
+    if (rr?.success) renderRecords(rr.records);
+  } else showToast('❌ 記錄失敗：'+(res?.message||'連線錯誤'));
 }
 
+// ── ADMIN ──
+async function loadAdmin() {
+  const [sRes, bRes, rRes] = await Promise.all([api('getScore'), api('getBehaviors'), api('getRewards')]);
+  if (sRes?.success) { currentScore=sRes.score; document.getElementById('adminScore').textContent=currentScore; }
+  if (bRes?.success) { behaviors=bRes.behaviors; renderAdminBehaviors(); }
+  if (rRes?.success) { rewards=rRes.rewards; renderAdminRewards(); }
+}
 function renderAdminBehaviors() {
   const list = document.getElementById('adminBehaviorList');
-  if (!behaviors.length) {
-    list.innerHTML = '<div class="empty-state">尚無行為項目</div>';
-    return;
-  }
+  if (!behaviors.length) { list.innerHTML='<div class="empty-state">尚無行為項目</div>'; return; }
   list.innerHTML = behaviors.map(b => {
-    const cls = b.type === '加分' ? 'add' : b.type === '扣分' ? 'sub' : 'warn';
-    const prefix = b.score > 0 ? '+' : '';
-    const scoreDisplay = b.type === '警告' ? '0' : `${prefix}${b.score}`;
+    const cls=b.type==='加分'?'add':b.type==='扣分'?'sub':'warn';
+    const s=Number(b.score); const prefix=s>0?'+':'';
     return `<div class="admin-row">
       <div class="admin-row-info">
         <div class="admin-row-name">${b.name}</div>
-        <div class="admin-row-sub">${scoreDisplay} 分</div>
+        <div class="admin-row-sub">${b.type==='警告'?'0':prefix+s} 分</div>
       </div>
       <span class="badge ${cls}">${b.type}</span>
       <button class="icon-btn" onclick="openEditBehavior(${b.index})">✏️</button>
     </div>`;
   }).join('');
 }
-
 function renderAdminRewards() {
   const list = document.getElementById('adminRewardList');
-  if (!rewards.length) {
-    list.innerHTML = '<div class="empty-state">尚無獎勵項目</div>';
-    return;
-  }
-  list.innerHTML = rewards.map(r => {
-    return `<div class="admin-row">
+  if (!rewards.length) { list.innerHTML='<div class="empty-state">尚無獎勵項目</div>'; return; }
+  list.innerHTML = rewards.map(r => `<div class="admin-row">
       <div class="admin-row-info">
         <div class="admin-row-name">${r.name}</div>
         <div class="admin-row-sub">${r.score} 分 · ${r.status}</div>
       </div>
       <button class="icon-btn" onclick="openEditReward(${r.index})">✏️</button>
-    </div>`;
-  }).join('');
+  </div>`).join('');
 }
-
 async function doAdjustScore() {
   const val = document.getElementById('adjustScoreInput').value;
-  if (val === '') return showToast('請輸入分數');
+  if (val==='') return showToast('請輸入分數');
   const res = await api('adjustScore', { score: parseInt(val) });
-  if (res && res.success) {
-    currentScore = parseInt(val);
-    document.getElementById('adminScore').textContent = currentScore;
-    document.getElementById('homeScore').textContent = currentScore;
-    document.getElementById('adjustScoreInput').value = '';
+  if (res?.success) {
+    currentScore=parseInt(val);
+    document.getElementById('adminScore').textContent=currentScore;
+    document.getElementById('homeScore').textContent=currentScore;
+    document.getElementById('adjustScoreInput').value='';
     showToast('✅ 總分已更新');
   }
 }
-
 async function doUpdatePin() {
   const pin = document.getElementById('newPinInput').value;
-  if (pin.length !== 4 || isNaN(pin)) return showToast('請輸入4位數字PIN');
+  if (pin.length!==4||isNaN(pin)) return showToast('請輸入4位數字PIN');
   const res = await api('updatePin', { newPin: pin });
-  if (res && res.success) {
-    document.getElementById('newPinInput').value = '';
-    showToast('✅ PIN 碼已更新');
-  }
+  if (res?.success) { document.getElementById('newPinInput').value=''; showToast('✅ PIN 碼已更新'); }
 }
 
-// ══════════════════════════════════
 // BEHAVIOR FORM
-// ══════════════════════════════════
-function openAddBehavior() {
-  editingBehaviorIndex = null;
-  document.getElementById('behaviorFormTitle').textContent = '新增行為項目';
-  document.getElementById('bName').value = '';
-  document.getElementById('bScore').value = '';
-  document.getElementById('bType').value = '加分';
-  document.getElementById('behaviorFormModal').classList.add('show');
-}
-
-function openEditBehavior(index) {
-  const b = behaviors.find(bh => bh.index === index);
-  if (!b) return;
-  editingBehaviorIndex = index;
-  document.getElementById('behaviorFormTitle').textContent = '編輯行為項目';
-  document.getElementById('bName').value = b.name;
-  document.getElementById('bScore').value = Math.abs(b.score);
-  document.getElementById('bType').value = b.type;
-  document.getElementById('behaviorFormModal').classList.add('show');
-}
-
-function closeBehaviorForm() {
-  document.getElementById('behaviorFormModal').classList.remove('show');
-}
-
+function openAddBehavior() { editBehaviorIndex=null; document.getElementById('behaviorFormTitle').textContent='新增行為項目'; document.getElementById('bName').value=''; document.getElementById('bScore').value=''; document.getElementById('bType').value='加分'; document.getElementById('behaviorSheet').classList.add('show'); }
+function openEditBehavior(index) { const b=behaviors.find(bh=>bh.index===index); if(!b)return; editBehaviorIndex=index; document.getElementById('behaviorFormTitle').textContent='編輯行為項目'; document.getElementById('bName').value=b.name; document.getElementById('bScore').value=Math.abs(Number(b.score)); document.getElementById('bType').value=b.type; document.getElementById('behaviorSheet').classList.add('show'); }
+function closeBehaviorSheet() { document.getElementById('behaviorSheet').classList.remove('show'); }
 async function saveBehavior() {
-  const name = document.getElementById('bName').value.trim();
-  const type = document.getElementById('bType').value;
-  let score = parseInt(document.getElementById('bScore').value) || 0;
-  if (!name) return showToast('請輸入行為名稱');
-  if (type === '扣分') score = -Math.abs(score);
-  if (type === '警告') score = 0;
-
-  let res;
-  if (editingBehaviorIndex !== null) {
-    res = await api('updateBehavior', { index: editingBehaviorIndex, name, score, type });
-  } else {
-    res = await api('addBehavior', { name, score, type });
-  }
-
-  if (res && res.success) {
-    closeBehaviorForm();
-    showToast('✅ 已儲存');
-    loadAdmin();
-  }
+  const name=document.getElementById('bName').value.trim();
+  const type=document.getElementById('bType').value;
+  let score=parseInt(document.getElementById('bScore').value)||0;
+  if(!name) return showToast('請輸入行為名稱');
+  if(type==='扣分') score=-Math.abs(score);
+  if(type==='警告') score=0;
+  const res = editBehaviorIndex!==null ? await api('updateBehavior',{index:editBehaviorIndex,name,score,type}) : await api('addBehavior',{name,score,type});
+  if(res?.success){closeBehaviorSheet();showToast('✅ 已儲存');loadAdmin();}
 }
 
-// ══════════════════════════════════
 // REWARD FORM
-// ══════════════════════════════════
-function openAddReward() {
-  editingRewardIndex = null;
-  document.getElementById('rewardFormTitle').textContent = '新增獎勵項目';
-  document.getElementById('rName').value = '';
-  document.getElementById('rScore').value = '';
-  document.getElementById('rewardFormModal').classList.add('show');
-}
-
-function openEditReward(index) {
-  const r = rewards.find(rw => rw.index === index);
-  if (!r) return;
-  editingRewardIndex = index;
-  document.getElementById('rewardFormTitle').textContent = '編輯獎勵項目';
-  document.getElementById('rName').value = r.name;
-  document.getElementById('rScore').value = r.score;
-  document.getElementById('rewardFormModal').classList.add('show');
-}
-
-function closeRewardForm() {
-  document.getElementById('rewardFormModal').classList.remove('show');
-}
-
+function openAddReward() { editRewardIndex=null; document.getElementById('rewardFormTitle').textContent='新增獎勵項目'; document.getElementById('rName').value=''; document.getElementById('rScore').value=''; document.getElementById('rewardSheet').classList.add('show'); }
+function openEditReward(index) { const r=rewards.find(rw=>rw.index===index); if(!r)return; editRewardIndex=index; document.getElementById('rewardFormTitle').textContent='編輯獎勵項目'; document.getElementById('rName').value=r.name; document.getElementById('rScore').value=r.score; document.getElementById('rewardSheet').classList.add('show'); }
+function closeRewardSheet() { document.getElementById('rewardSheet').classList.remove('show'); }
 async function saveReward() {
-  const name = document.getElementById('rName').value.trim();
-  const score = parseInt(document.getElementById('rScore').value);
-  if (!name) return showToast('請輸入獎勵名稱');
-  if (!score || score <= 0) return showToast('請輸入正確分數');
-
-  let res;
-  if (editingRewardIndex !== null) {
-    res = await api('updateReward', { index: editingRewardIndex, name, score, status: '上架' });
-  } else {
-    res = await api('addReward', { name, score });
-  }
-
-  if (res && res.success) {
-    closeRewardForm();
-    showToast('✅ 已儲存');
-    loadAdmin();
-  }
+  const name=document.getElementById('rName').value.trim();
+  const score=parseInt(document.getElementById('rScore').value);
+  if(!name) return showToast('請輸入獎勵名稱');
+  if(!score||score<=0) return showToast('請輸入正確分數');
+  const res = editRewardIndex!==null ? await api('updateReward',{index:editRewardIndex,name,score,status:'上架'}) : await api('addReward',{name,score});
+  if(res?.success){closeRewardSheet();showToast('✅ 已儲存');loadAdmin();}
 }
 
-// ══════════════════════════════════
 // TOAST
-// ══════════════════════════════════
 let toastTimer;
 function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),2800);
 }
 
-// Close modals on overlay click
-document.getElementById('behaviorFormModal').addEventListener('click', function(e) {
-  if (e.target === this) closeBehaviorForm();
-});
-document.getElementById('rewardFormModal').addEventListener('click', function(e) {
-  if (e.target === this) closeRewardForm();
-});
-document.getElementById('recordConfirmModal').addEventListener('click', function(e) {
-  if (e.target === this) closeConfirmModal();
+// CLOSE SHEETS ON OVERLAY CLICK
+['confirmSheet','behaviorSheet','rewardSheet'].forEach(id=>{
+  document.getElementById(id).addEventListener('click',function(e){if(e.target===this)this.classList.remove('show');});
 });
 </script>
 </body>
